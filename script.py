@@ -64,7 +64,7 @@ def get_img_data(wx_img_url):
 
     # get image bin data TODO Un-comment 'origin'
     headers = {
-        # "Origin": "https://mp.weixin.qq.com",
+        "Origin": "https://mp.weixin.qq.com",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36",
     }  # the header may be not important
     img = requests.get(url=disable_webp(wx_img_url), headers=headers)
@@ -104,6 +104,7 @@ def upload_img(img_data):
         exit(0)
     return DOMAIN + res["link"]
 
+
 def modify_src(html):
     """modify the html to make sure all the images can be shown in browser"""
 
@@ -123,15 +124,16 @@ def modify_src(html):
 
 def send_post(post_type, title, cate, content):
     data = {
-        "post_type"
+        "post_type": post_type,
+        "title": title,
+        "cate": cate,
+        "content": content
     }
-    requests.post()
+    requests.post(data=data, header={"Cookie": "PHPSESSID=2oek5ov42u3vj8lnsblkn6srj2"})
 
 if __name__ == '__main__':
     # url = sys.argv[1]
     url = "https://mp.weixin.qq.com/s?src=11&timestamp=1553088601&ver=1496&signature=xRnJpMlUM6Zdb0j57OLkOuL3yZHu90CzwzMiNwycd-xr*rzabd4wqqPyAkDJEqUzrULVcK9ckfCTo31qSnr7F4tBpLX64J831dWpLCzEyaD8DhbEQmFElH8GAfH7pRGe&new=1"
     final_html = modify_src(requests.get(url).content)
+    send_post('1', 'testest', 'test', final_html)
 
-    # f = open("abc.html", "w", encoding="utf-8")
-    # f.write(final_html)
-    # f.close()
